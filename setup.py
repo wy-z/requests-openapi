@@ -13,13 +13,13 @@ def read(filename):
 
 
 setup(
-    name="oai-requestor",
+    name="oai-request",
     version="0.0.1",
-    url="https://github.com/wy-z/oai-requestor",
+    url="https://github.com/wy-z/oai-request",
     license="MIT",
     author="weiyang",
     author_email="weiyang.ones@gmail.com",
-    description="OAIRequestor is a python client for OpenAPI 3.0",
+    description="OAIRequest is a python client library for OpenAPI 3.0",
     long_description=read("README.md"),
     packages=find_packages(exclude=("tests",)),
     install_requires=["requests", "pyyaml"],

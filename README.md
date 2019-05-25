@@ -1,6 +1,6 @@
-# oai-requestor
+# oai-request
 
-OAIRequestor is a python client for OpenAPI 3.0
+OAIRequest is a python client library for OpenAPI 3.0
 
 ## Usage
 
