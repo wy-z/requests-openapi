@@ -1,5 +1,9 @@
 # oai-request
 
+[![image](https://img.shields.io/pypi/v/oai-request.svg)](https://pypi.org/project/oai-request/)
+[![image](https://img.shields.io/pypi/l/oai-request.svg)](https://pypi.org/project/oai-request/)
+[![image](https://img.shields.io/pypi/pyversions/oai-request.svg)](https://pypi.org/project/oai-request/)
+
 OAIRequest is a python client library for OpenAPI 3.0
 
 ## Usage
