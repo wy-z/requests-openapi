@@ -13,8 +13,8 @@ import oai_request
 
 c = oai_request.Client()
 c.load_from_url("http://petstore.swagger.io/v2/swagger.json")
-c.requestor.auth = (user, password) # requests.Session
-resp = c.getPetById(petId=1) # requests.Response
+c.requestor.auth = (user, password) # c.requestor: requests.Session
+resp = c.getPetById(petId=1) # resp: requests.Response
 resp.json()
 ```
 
