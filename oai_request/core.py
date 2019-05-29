@@ -2,9 +2,8 @@ import logging
 import pprint
 import typing
 
-import yaml
-
 import requests
+import yaml
 
 from .requestor import Requestor
 
@@ -175,7 +174,7 @@ class Client(object):
             [i in spec for i in [OAIKeyWord.OPENAPI, OAIKeyWord.INFO, OAIKeyWord.PATHS]]
         ):
             raise ValueError("Invaliad openapi document")
-        self._spec = spec
+        self._spec = spec.copy()
 
         servers = spec.pop(OAIKeyWord.SERVERS, [])
         for key in spec:
