@@ -175,12 +175,12 @@ class Client(object):
         ):
             raise ValueError("Invaliad openapi document")
         self._spec = spec.copy()
-        spec = spec.copy()
+        _spec = spec.copy()
 
-        servers = spec.pop(OAIKeyWord.SERVERS, [])
-        for key in spec:
+        servers = _spec.pop(OAIKeyWord.SERVERS, [])
+        for key in _spec:
             rkey = key.replace("-", "_")
-            self.__setattr__(rkey, spec[key])
+            self.__setattr__(rkey, _spec[key])
         self.servers = [
             Server(
                 url=s.get(OAIKeyWord.URL),
