@@ -175,6 +175,7 @@ class Client(object):
         ):
             raise ValueError("Invaliad openapi document")
         self._spec = spec.copy()
+        spec = spec.copy()
 
         servers = spec.pop(OAIKeyWord.SERVERS, [])
         for key in spec:
