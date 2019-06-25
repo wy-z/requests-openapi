@@ -218,7 +218,13 @@ class Client(object):
                     if type(v) is not list:
                         self._operations[operation_id] = [v]
                     self._operations[operation_id].append(
-                        Operation(path, method, op_spec, requestor=self._requestor)
+                        Operation(
+                            path,
+                            method,
+                            op_spec,
+                            requestor=self._requestor,
+                            server=self._server,
+                        )
                     )
 
     def load_from_url(self, url):
