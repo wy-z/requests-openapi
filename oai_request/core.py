@@ -166,6 +166,10 @@ class Client(object):
         self._spec = {}
 
     @property
+    def operations(self):
+        return self._operations
+
+    @property
     def spec(self):
         return self._spec
 
