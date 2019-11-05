@@ -11,12 +11,12 @@ def read(filename):
 
 
 setup(
-    name="requests-oai",
-    url="https://github.com/wy-z/requests-oai",
+    name="requests-openapi",
+    url="https://github.com/wy-z/requests-openapi",
     license="MIT",
     author="weiyang",
     author_email="weiyang.ones@gmail.com",
-    description="RequestsOAI is a python client library for OpenAPI 3.0",
+    description="RequestsOpenAPI is a python client library for OpenAPI 3.0",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     use_scm_version=True,

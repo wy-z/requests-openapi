@@ -8,7 +8,7 @@ import yaml
 from .requestor import Requestor
 
 
-class OAIKeyWord:
+class OpenAPIKeyWord:
     OPENAPI = "openapi"
     INFO = "info"
 
@@ -73,7 +73,7 @@ class Operation(object):
 
     @property
     def operation_id(self):
-        return self._spec[OAIKeyWord.OPERATION_ID]
+        return self._spec[OpenAPIKeyWord.OPERATION_ID]
 
     @property
     def method(self):
@@ -88,27 +88,27 @@ class Operation(object):
 
     def _gen_call(self):
         def f(**kwargs):
-            # collect oai params
+            # collect api params
             path_params = {}
             params = {}
             headers = {}
             cookies = {}
-            for spec in self._spec.get(OAIKeyWord.PARAMETERS, []):
-                _in = spec[OAIKeyWord.IN]
-                name = spec[OAIKeyWord.NAME]
+            for spec in self._spec.get(OpenAPIKeyWord.PARAMETERS, []):
+                _in = spec[OpenAPIKeyWord.IN]
+                name = spec[OpenAPIKeyWord.NAME]
 
                 if name not in kwargs:
-                    if _in == OAIKeyWord.PATH:
+                    if _in == OpenAPIKeyWord.PATH:
                         raise ValueError(f"'{name}' is required")
                     continue
 
-                if _in == OAIKeyWord.PATH:
+                if _in == OpenAPIKeyWord.PATH:
                     path_params[name] = kwargs.pop(name)
-                elif _in == OAIKeyWord.QUERY:
+                elif _in == OpenAPIKeyWord.QUERY:
                     params[name] = kwargs.pop(name)
-                elif _in == OAIKeyWord.HEADER:
+                elif _in == OpenAPIKeyWord.HEADER:
                     headers[name] = kwargs.pop(name)
-                elif _in == OAIKeyWord.COOKIE:
+                elif _in == OpenAPIKeyWord.COOKIE:
                     cookies[name] = kwargs.pop(name)
 
             # collect internal params
@@ -175,21 +175,28 @@ class Client(object):
 
     def load_spec(self, spec: typing.Dict):
         if not all(
-            [i in spec for i in [OAIKeyWord.OPENAPI, OAIKeyWord.INFO, OAIKeyWord.PATHS]]
+            [
+                i in spec
+                for i in [
+                    OpenAPIKeyWord.OPENAPI,
+                    OpenAPIKeyWord.INFO,
+                    OpenAPIKeyWord.PATHS,
+                ]
+            ]
         ):
             raise ValueError("Invaliad openapi document")
         self._spec = spec.copy()
         _spec = spec.copy()
 
-        servers = _spec.pop(OAIKeyWord.SERVERS, [])
+        servers = _spec.pop(OpenAPIKeyWord.SERVERS, [])
         for key in _spec:
             rkey = key.replace("-", "_")
             self.__setattr__(rkey, _spec[key])
         self.servers = [
             Server(
-                url=s.get(OAIKeyWord.URL),
-                description=s.get(OAIKeyWord.DESCRIPTION),
-                variables=s.get(OAIKeyWord.VARIABLES),
+                url=s.get(OpenAPIKeyWord.URL),
+                description=s.get(OpenAPIKeyWord.DESCRIPTION),
+                variables=s.get(OpenAPIKeyWord.VARIABLES),
             )
             for s in servers
         ]
@@ -202,10 +209,10 @@ class Client(object):
         self._operations = {}
         for path, path_spec in self.paths.items():
             for method, op_spec in path_spec.items():
-                operation_id = op_spec.get(OAIKeyWord.OPERATION_ID)
+                operation_id = op_spec.get(OpenAPIKeyWord.OPERATION_ID)
                 if not operation_id:
                     logging.warn(
-                        f"'{OAIKeyWord.OPERATION_ID}' not found in: '[{method}] {path}'"
+                        f"'{OpenAPIKeyWord.OPERATION_ID}' not found in: '[{method}] {path}'"
                     )
                     continue
 
