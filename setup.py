@@ -16,7 +16,7 @@ setup(
     license="MIT",
     author="weiyang",
     author_email="weiyang.ones@gmail.com",
-    description="OAIRequest is a python client library for OpenAPI 3.0",
+    description="RequestsOAI is a python client library for OpenAPI 3.0",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     use_scm_version=True,
