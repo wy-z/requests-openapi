@@ -1,17 +1,17 @@
-# oai-request
+# requests-oai
 
-[![image](https://img.shields.io/pypi/v/oai-request.svg)](https://pypi.org/project/oai-request/)
-[![image](https://img.shields.io/pypi/l/oai-request.svg)](https://pypi.org/project/oai-request/)
-[![image](https://img.shields.io/pypi/pyversions/oai-request.svg)](https://pypi.org/project/oai-request/)
+[![image](https://img.shields.io/pypi/v/requests-oai.svg)](https://pypi.org/project/requests-oai/)
+[![image](https://img.shields.io/pypi/l/requests-oai.svg)](https://pypi.org/project/requests-oai/)
+[![image](https://img.shields.io/pypi/pyversions/requests-oai.svg)](https://pypi.org/project/requests-oai/)
 
-OAIRequest is a python client library for OpenAPI 3.0
+RequestsOAI is a python client library for OpenAPI 3.0
 
 ## Usage
 
 ```python
-import oai_request
+import requests_oai
 
-c = oai_request.Client()
+c = requests_oai.Client()
 c.load_from_url("http://petstore.swagger.io/v2/swagger.json")
 c.requestor.auth = (user, password) # c.requestor: requests.Session
 resp = c.getPetById(petId=1) # resp: requests.Response
@@ -21,7 +21,7 @@ resp.json()
 ## Installation
 
 ```
-pip install oai-request
+pip install requests-oai
 ```
 
 ## Licennse

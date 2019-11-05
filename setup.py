@@ -11,8 +11,8 @@ def read(filename):
 
 
 setup(
-    name="oai-request",
-    url="https://github.com/wy-z/oai-request",
+    name="requests-oai",
+    url="https://github.com/wy-z/requests-oai",
     license="MIT",
     author="weiyang",
     author_email="weiyang.ones@gmail.com",
