@@ -238,12 +238,12 @@ class Client(object):
                         )
                     )
 
-    def load_from_url(self, url):
+    def load_spec_from_url(self, url):
         spec = load_spec_from_url(url)
         self.load_spec(spec)
         return
 
-    def load_from_file(self, file_path):
+    def load_spec_from_file(self, file_path):
         spec = load_spec_from_file(file_path)
         self.load_spec(spec)
         return
