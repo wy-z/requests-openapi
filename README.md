@@ -12,9 +12,8 @@ RequestsOpenAPI is a python client library for OpenAPI 3.0
 import requests_openapi
 
 c = requests_openapi.Client()
-c.load_spec_from_url("http://petstore.swagger.io/v2/swagger.json")
-c.requestor.auth = (user, password) # c.requestor: requests.Session
-resp = c.getPetById(petId=1) # resp: requests.Response
+c.load_spec_from_url("https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore.yaml")
+resp = c.listPets() # resp: requests.Response
 resp.json()
 ```
 
