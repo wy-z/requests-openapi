@@ -112,7 +112,7 @@ class Operation(object):
                     cookies[name] = kwargs.pop(name)
 
             # collect internal params
-            for k in kwargs:
+            for k in list(kwargs.keys()):
                 if not k.startswith(self._internal_param_prefix):
                     continue
                 kwargs[
