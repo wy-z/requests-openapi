@@ -217,7 +217,7 @@ class Client(object):
             for method, op_spec in path_spec.items():
                 operation_id = op_spec.get(OpenAPIKeyWord.OPERATION_ID)
                 if not operation_id:
-                    logging.warn(
+                    logging.warning(
                         f"'{OpenAPIKeyWord.OPERATION_ID}' not found in: '[{method}] {path}'"
                     )
                     continue
@@ -233,7 +233,7 @@ class Client(object):
                 if operation_id not in self._operations:
                     self._operations[operation_id] = op
                 else:
-                    logging.warn(
+                    logging.warning(
                         f"multiple '{operation_id}' found , operation ID should be unique"
                     )
                     v = self._operations[operation_id]
