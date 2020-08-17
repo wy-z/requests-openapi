@@ -56,15 +56,17 @@ class Operation(object):
     _method: str
     _spec: typing.Dict[str, typing.Any]
     _requestor: Requestor
+    _req_opts: typing.Dict[str, typing.Any]
     _server: Server
 
     _call: typing.Optional[typing.Callable] = None
 
-    def __init__(self, path, method, spec, requestor=None, server=None):
+    def __init__(self, path, method, spec, requestor=None, req_opts={}, server=None):
         self._path = path
         self._method = method
         self._spec = spec
         self._requestor = requestor
+        self._req_opts = req_opts
         self._server = server
 
     @property
@@ -121,6 +123,8 @@ class Operation(object):
             kwargs.setdefault("params", {}).update(params)
             kwargs.setdefault("headers", {}).update(headers)
             kwargs.setdefault("cookies", {}).update(cookies)
+            for k, v in self._req_opts.items():
+                kwargs.setdefault(k, v)
             return self._requestor.request(
                 self._method, self.url(**path_params), **kwargs
             )
@@ -155,12 +159,14 @@ def load_spec_from_file(file_path):
 
 class Client(object):
     _requestor: Requestor
+    _req_opts: typing.Dict[str, typing.Any]
     _server: Server
     _operations: typing.Dict[str, typing.Any]
     _spec: typing.Dict[str, typing.Any]
 
-    def __init__(self, requestor=None, server=None):
+    def __init__(self, requestor=None, server=None, req_opts={}):
         self._requestor = requestor or requests.Session()
+        self._req_opts = req_opts
         self._server = server
         self._operations = {}
         self._spec = {}
@@ -216,27 +222,24 @@ class Client(object):
                     )
                     continue
 
+                op = Operation(
+                    path,
+                    method,
+                    op_spec,
+                    requestor=self._requestor,
+                    req_opts=self._req_opts,
+                    server=self._server,
+                )
                 if operation_id not in self._operations:
-                    self._operations[operation_id] = Operation(
-                        path,
-                        method,
-                        op_spec,
-                        requestor=self._requestor,
-                        server=self._server,
-                    )
+                    self._operations[operation_id] = op
                 else:
+                    logging.warn(
+                        f"multiple '{operation_id}' found , operation ID should be unique"
+                    )
                     v = self._operations[operation_id]
                     if type(v) is not list:
                         self._operations[operation_id] = [v]
-                    self._operations[operation_id].append(
-                        Operation(
-                            path,
-                            method,
-                            op_spec,
-                            requestor=self._requestor,
-                            server=self._server,
-                        )
-                    )
+                    self._operations[operation_id].append(op)
 
     def load_spec_from_url(self, url):
         spec = load_spec_from_url(url)

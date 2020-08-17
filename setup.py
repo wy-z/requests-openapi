@@ -10,6 +10,9 @@ def read(filename):
         return fd.read()
 
 
+requirements = ["requests", "pyyaml"]
+requirements_dev = ["tox", "pytest"]
+
 setup(
     name="requests-openapi",
     url="https://github.com/wy-z/requests-openapi",
@@ -22,7 +25,8 @@ setup(
     use_scm_version=True,
     setup_requires=["setuptools_scm"],
     packages=find_packages(exclude=("tests",)),
-    install_requires=["requests", "pyyaml"],
+    install_requires=requirements,
+    extras_require={"dev": requirements_dev},
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
