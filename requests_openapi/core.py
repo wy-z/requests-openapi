@@ -81,7 +81,7 @@ class Operation(object):
 
     @property
     def method(self):
-        return self.method
+        return self._method
 
     @property
     def path(self):
