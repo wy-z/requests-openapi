@@ -23,6 +23,6 @@ resp.json()
 pip install requests-openapi
 ```
 
-## Licennse
+## License
 
 MIT
