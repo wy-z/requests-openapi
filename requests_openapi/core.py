@@ -39,7 +39,7 @@ class Server(object):
     description: str
     variables: typing.Dict[str, typing.Any]
 
-    def __init__(self, url=None, description=None, variables={}):
+    def __init__(self, url: str, description=None, variables={}):
         self._url = url
         self.description = description
         self.variables = variables
@@ -202,7 +202,7 @@ class Client(object):
             self.__setattr__(rkey, _spec[key])
         self.servers = [
             Server(
-                url=s.get(OpenAPIKeyWord.URL),
+                s.get(OpenAPIKeyWord.URL, ""),
                 description=s.get(OpenAPIKeyWord.DESCRIPTION),
                 variables=s.get(OpenAPIKeyWord.VARIABLES),
             )
