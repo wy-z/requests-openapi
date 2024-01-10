@@ -10,7 +10,7 @@ def read(filename):
         return fd.read()
 
 
-requirements = ["requests", "pyyaml", "openapi-pydantic"]
+requirements = ["requests", "pyyaml", "openapi-pydantic", "jsonref"]
 requirements_dev = ["ruff", "mypy", "tox", "pytest"]
 
 setup(

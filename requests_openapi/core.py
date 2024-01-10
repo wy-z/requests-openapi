@@ -7,23 +7,36 @@ import functools
 import requests
 import yaml
 import openapi_pydantic as openapi
+import jsonref
 
 from .requestor import Requestor
 
 log = logging.getLogger(__name__)
 
+OPENAPI_KEY_PATHS = "paths"
+OPENAPI_KEY_PARAMETERS = "parameters"
+
+
+class Server(openapi.Server):
+    def set_url(self, url: str):
+        self.url = url
+
+    @classmethod
+    def from_openapi_server(cls, s: openapi.Server):
+        obj = copy.copy(s)
+        obj.__class__ = cls
+        return obj
+
 
 class Operation(object):
     INTERNAL_PARAM_PREFIX = "_"
-
-    _call: typing.Callable
 
     path: str
     method: str
     spec: openapi.Operation
     requestor: Requestor
     req_opts: dict[str, typing.Any]
-    server: openapi.Server
+    server: Server
     # https://swagger.io/specification/#path-item-object parameters
     parent_params: list[openapi.Parameter]
 
@@ -34,7 +47,7 @@ class Operation(object):
         spec: openapi.Operation,
         *,
         requestor: Requestor,
-        server: openapi.Server,
+        server: Server,
         req_opts={},
         parent_params: list[openapi.Parameter] = [],
     ):
@@ -59,10 +72,6 @@ class Operation(object):
             # collect api params
             path_params, params, headers, cookies = {}, {}, {}, {}
             for spec in (self.spec.parameters or []) + (self.parent_params or []):
-                if isinstance(spec, openapi.Reference):
-                    raise NotImplementedError(
-                        "reference is not supported yet, try dereferences first"
-                    )
                 _in = spec.param_in
                 name = spec.name
                 # path param is required
@@ -97,9 +106,7 @@ class Operation(object):
         return f
 
     def __call__(self, *args, **kwargs):
-        if not self._call:
-            self._call = self._gen_call()
-        return self._call(*args, **kwargs)
+        return self._gen_call()(*args, **kwargs)
 
     def help(self):
         return pprint.pprint(self.spec.model_dump(), indent=2)
@@ -120,21 +127,11 @@ def load_spec_from_file(file_path):
     return yaml.load(spec_str, Loader=yaml.CLoader)
 
 
-class Server(openapi.Server):
-    def set_url(self, url: str):
-        self.url = url
-
-    @classmethod
-    def from_openapi_server(cls, s: openapi.Server):
-        obj = copy.copy(s)
-        obj.__class__ = cls
-        return obj
-
-
 class Client:
     _requestor: Requestor
     _server: Server | None
     _operations: dict[str, typing.Any]
+    _raw_spec: dict[str, typing.Any]
     _spec: openapi.OpenAPI
 
     req_opts: dict[str, typing.Any]
@@ -174,6 +171,7 @@ class Client:
         self._collect_operations()
 
     def load_spec(self, raw_spec: typing.Dict):
+        self._raw_spec = raw_spec
         self._spec = openapi.parse_obj(raw_spec)
 
         # collect server
@@ -194,14 +192,50 @@ class Client:
         "trace",
     ]
 
+    @functools.cached_property
+    def derefered_raw_spec(self) -> dict:
+        return jsonref.replace_refs(self._raw_spec)
+
+    def _check_derefer_params(
+        self,
+        params: list[openapi.Parameter | openapi.Reference],
+        derefered_params_spec: list[dict],
+    ) -> list[openapi.Parameter]:
+        refs = list(
+            filter(
+                lambda x: isinstance(x, openapi.Reference)
+                or type(x).__name__ == "Reference",
+                params,
+            )
+        )
+        if not refs:
+            return params
+        return [openapi.Parameter(**d) for d in derefered_params_spec]
+
     def _collect_operations(self):
+        if not self.server:
+            raise ValueError("server is required, 'set_server' first")
+
         self._operations = {}
-        for path, path_spec in self.spec.paths.items():
+        for path, path_spec in (self.spec.paths or {}).items():
             for method in self.PATH_ITEM_METHODS:
                 op_spec = getattr(path_spec, method, None)
                 if not op_spec:
                     continue
                 op_id = op_spec.operationId
+                parent_params = self._check_derefer_params(
+                    path_spec.parameters or [],
+                    self.derefered_raw_spec.get(OPENAPI_KEY_PATHS, {})
+                    .get(path, {})
+                    .get(OPENAPI_KEY_PARAMETERS, []),
+                )
+                op_spec.parameters = self._check_derefer_params(
+                    op_spec.parameters or [],
+                    self.derefered_raw_spec.get(OPENAPI_KEY_PATHS, {})
+                    .get(path, {})
+                    .get(method, {})
+                    .get(OPENAPI_KEY_PARAMETERS, []),
+                )
                 op = Operation(
                     path,
                     method,
@@ -209,7 +243,7 @@ class Client:
                     requestor=self.requestor,
                     req_opts=self.req_opts,
                     server=self.server,
-                    parent_params=path_spec.parameters or [],
+                    parent_params=parent_params,
                 )
                 if op_id not in self._operations:
                     self._operations[op_id] = op
