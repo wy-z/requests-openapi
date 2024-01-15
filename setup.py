@@ -10,8 +10,8 @@ def read(filename):
         return fd.read()
 
 
-requirements = ["requests", "pyyaml"]
-requirements_dev = ["tox", "pytest"]
+requirements = ["requests", "pyyaml", "openapi-pydantic", "jsonref"]
+requirements_dev = ["ruff", "mypy", "pytest", "responses"]
 
 setup(
     name="requests-openapi",
@@ -31,9 +31,5 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
     ],
 )
