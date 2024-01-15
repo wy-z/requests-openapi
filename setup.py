@@ -11,7 +11,7 @@ def read(filename):
 
 
 requirements = ["requests", "pyyaml", "openapi-pydantic", "jsonref"]
-requirements_dev = ["ruff", "mypy", "pytest", "responses"]
+requirements_dev = ["ruff", "mypy", "pytest", "responses", "pytest-cov"]
 
 setup(
     name="requests-openapi",

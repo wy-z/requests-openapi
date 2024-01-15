@@ -16,5 +16,5 @@ lint:
 
 test:
     @echo "Running tests..."
-    @pytest
+    @pytest --cov=requests_openapi
     @echo "Done!"
