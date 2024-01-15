@@ -1,7 +1,9 @@
-import responses
 import os
 
+import responses
+
 import requests_openapi
+
 from . import conftest
 
 

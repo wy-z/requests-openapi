@@ -1,5 +1,7 @@
 import os
+
 import pytest
+
 import requests_openapi
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))

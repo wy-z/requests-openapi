@@ -1,13 +1,13 @@
-import logging
 import copy
+import functools
+import logging
 import pprint
 import typing
-import functools
 
+import jsonref
+import openapi_pydantic as openapi
 import requests
 import yaml
-import openapi_pydantic as openapi
-import jsonref
 
 from .requestor import Requestor
 

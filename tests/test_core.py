@@ -1,8 +1,9 @@
-import responses
 import requests
+import responses
+
+import requests_openapi
 
 from . import conftest
-import requests_openapi
 
 
 def test_load_from_file():
