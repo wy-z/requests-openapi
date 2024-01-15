@@ -18,6 +18,11 @@ OPENAPI_KEY_PARAMETERS = "parameters"
 
 
 class Server(openapi.Server):
+    def get_url(self):
+        if self.variables:
+            return self.url.format(**self.variables)
+        return self.url
+
     def set_url(self, url: str):
         self.url = url
 
@@ -63,8 +68,8 @@ class Operation(object):
     def operation_id(self):
         return self.spec.operationId
 
-    def url(self, **kwargs):
-        return self.server.url + self.path.format(**kwargs)
+    def gen_url(self, **kwargs):
+        return self.server.get_url() + self.path.format(**kwargs)
 
     @functools.cache
     def _gen_call(self):
@@ -100,7 +105,7 @@ class Operation(object):
             for k, v in self.req_opts.items():
                 kwargs.setdefault(k, v)
             return self.requestor.request(
-                self.method, self.url(**path_params), **kwargs
+                self.method, self.gen_url(**path_params), **kwargs
             )
 
         return f
@@ -159,6 +164,8 @@ class Client:
         return self._requestor
 
     def set_requestor(self, r: Requestor):
+        if not isinstance(r, Requestor):
+            raise ValueError("requestor should be an instance of Requestor")
         self._requestor = r
         self._collect_operations()
 
@@ -252,7 +259,7 @@ class Client:
                         f"multiple '{op_id}' found , operation ID should be unique"
                     )
                     v = self._operations[op_id]
-                    if type(v) is not list:
+                    if isinstance(v, list):
                         self._operations[op_id] = [v]
                     self._operations[op_id].append(op)
 
