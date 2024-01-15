@@ -9,9 +9,9 @@ A lightweight but powerful and easy-to-use Python client library for OpenAPI v3.
 
 ## Key Features
 
-- Lightweight Design: Experience a minimalistic interface.
-- Focus on Essentials: Helps you simplify the handling of Paths, Parameters, Headers, Cookies, etc., while inheriting all the capabilities of Requests.
-- Testing and Integration Made Easy: Whether you're running tests or integrating with other systems, the client simplifies these tasks.
+- **Lightweight Design**: Experience a minimalistic interface.
+- **Focus on Essentials**: Helps you simplify the handling of Paths, Parameters, Headers, Cookies, etc., while inheriting all the capabilities of Requests.
+- **Testing and Integration Made Easy**: Whether you're running tests or integrating with other systems, the client simplifies these tasks.
 
 ## Usage
 
