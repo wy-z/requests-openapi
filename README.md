@@ -49,6 +49,19 @@ requests_openapi.Client(req_opts={"timeout": 60}).load_spec_from_file("xx")
 
 # parameters starts with '_' or not found in openapi spec, will be passed through to the requesting
 c.createPets(json={**}, _headers={**}, _params={**}, _cookies={**})
+
+# parameters
+# in: cookie, name: csrftoken
+c.createPets(csrftoken="***")
+# in: header, name: x-foo
+c.createPets(**{"x-foo": "***"})
+# in: path, name: userId
+c.getUser(userId=1)
+# in: query, name: offset
+c.listUsers(offset=1)
+
+# http body, just like requests.Session
+c.createPets(json={***}) or c.createPets(data={***})
 ```
 
 ## Installation
