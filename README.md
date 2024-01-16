@@ -3,7 +3,7 @@
 [![image](https://img.shields.io/pypi/v/requests-openapi.svg)](https://pypi.org/project/requests-openapi/)
 [![image](https://img.shields.io/pypi/l/requests-openapi.svg)](https://pypi.org/project/requests-openapi/)
 [![image](https://img.shields.io/pypi/pyversions/requests-openapi.svg)](https://pypi.org/project/requests-openapi/)
-[![image](https://raw.githubusercontent.com/wy-z/requests-openapi/wy_develop/tests/coverage-badge.svg)](https://github.com/wy-z/requests-openapi)
+[![image](https://raw.githubusercontent.com/wy-z/requests-openapi/master/tests/coverage-badge.svg)](https://github.com/wy-z/requests-openapi)
 
 A lightweight but powerful and easy-to-use Python client library for OpenAPI v3.
 
