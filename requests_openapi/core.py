@@ -259,7 +259,7 @@ class Client:
                         f"multiple '{op_id}' found , operation ID should be unique"
                     )
                     v = self._operations[op_id]
-                    if isinstance(v, list):
+                    if not isinstance(v, list):
                         self._operations[op_id] = [v]
                     self._operations[op_id].append(op)
 
