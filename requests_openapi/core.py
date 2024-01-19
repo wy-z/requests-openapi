@@ -9,6 +9,11 @@ import yaml
 import openapi_pydantic as openapi
 import jsonref
 
+try:
+    from yaml import CLoader as yaml_loader
+except ImportError:
+    from yaml import Loader as yaml_loader
+
 from .requestor import Requestor
 
 log = logging.getLogger(__name__)
@@ -123,13 +128,13 @@ class Operation(object):
 def load_spec_from_url(url):
     r = requests.get(url)
     r.raise_for_status()
-    return yaml.load(r.text, Loader=yaml.CLoader)
+    return yaml.load(r.text, Loader=yaml_loader)
 
 
 def load_spec_from_file(file_path):
     with open(file_path) as f:
         spec_str = f.read()
-    return yaml.load(spec_str, Loader=yaml.CLoader)
+    return yaml.load(spec_str, Loader=yaml_loader)
 
 
 class Client:
