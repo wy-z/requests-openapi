@@ -28,7 +28,9 @@ class Server(openapi.Server):
             return self.url.format(**self.variables)
         return self.url
 
-    def set_url(self, url: str):
+    def set_url(self, url: str, strip_slash=True):
+        if strip_slash:
+            url = url.rstrip("/")
         self.url = url
 
     @classmethod
