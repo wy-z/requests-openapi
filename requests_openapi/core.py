@@ -141,7 +141,7 @@ def load_spec_from_file(file_path):
 
 class Client:
     _requestor: Requestor
-    _server: Server | None
+    _server: typing.Optional[Server]
     _operations: dict[str, typing.Any]
     _raw_spec: dict[str, typing.Any]
     _spec: openapi.OpenAPI
@@ -150,8 +150,8 @@ class Client:
 
     def __init__(
         self,
-        requestor: Requestor | None = None,
-        server: Server | None = None,
+        requestor: typing.Optional[Requestor] = None,
+        server: typing.Optional[Server] = None,
         req_opts={},
     ):
         self._requestor = requestor or requests.Session()
@@ -212,7 +212,7 @@ class Client:
 
     def _check_derefer_params(
         self,
-        params: list[openapi.Parameter | openapi.Reference],
+        params: list[typing.Union[openapi.Parameter, openapi.Reference]],
         derefered_params_spec: list[dict],
     ) -> list[openapi.Parameter]:
         refs = list(
