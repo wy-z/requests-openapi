@@ -83,16 +83,18 @@ class Operation(object):
         def f(**kwargs):
             # collect api params
             path_params, params, headers, cookies = {}, {}, {}, {}
+            path_params = kwargs.pop("_path_params", {})
+
             for spec in (self.spec.parameters or []) + (self.parent_params or []):
                 _in = spec.param_in
                 name = spec.name
                 # path param is required
-                if name not in kwargs:
+                if name not in kwargs and path_params.get(name) is None:
                     if _in == openapi.ParameterLocation.PATH:
                         raise ValueError(f"path param '{name}' is required")
                     continue
                 # collect params
-                if _in == openapi.ParameterLocation.PATH:
+                if _in == openapi.ParameterLocation.PATH and path_params.get(name) is None:
                     path_params[name] = kwargs.pop(name)
                 elif _in == openapi.ParameterLocation.QUERY:
                     params[name] = kwargs.pop(name)

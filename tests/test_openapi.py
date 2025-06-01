@@ -146,3 +146,7 @@ def test_openapi_with_params():
     resp = c.ListUsersWithCookie(csrftoken="1")
     assert resp.ok
     assert resp.json() == {"in": "cookie", "name": "csrftoken"}
+    # path_params
+    resp = c.GetUser(_path_params = {"userId": 1})
+    assert resp.ok
+    assert resp.json() == {"in": "path", "name": "userId"}
